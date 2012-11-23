@@ -31,3 +31,6 @@ $m->submit_form(
 );
 infof($m->uri);
 $m->follow_link(text => '利用料金を確認する');
+infof($m->uri);
+$m->submit;
+infof($m->uri);
