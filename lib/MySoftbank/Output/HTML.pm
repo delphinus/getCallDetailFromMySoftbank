@@ -121,7 +121,7 @@ __DATA__
         </style>
     </head>
     <body>
-        <h1>[% year %]年[% month %]月版通話明細集計（[% first_day %] 〜 [% last_day %]</h1>
+        <h1>[% year %]年[% month %]月版通話明細集計（[% first_day %] 〜 [% last_day %]）</h1>
         <h2>ランキング（長く電話した順）上位10位まで</h2>
         <table>
             <thead><tr><th>順位</th><th>電話番号</th><th>名前</th><th>時間（秒）</th><th>時間</tr></thead>
