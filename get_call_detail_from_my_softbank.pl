@@ -27,8 +27,6 @@ use Pod::Usage;
 use FindBin;
 use lib "$FindBin::Bin/lib";
 use MySoftbank::CallDetail;
-use MySoftbank::AddressBook;
-use MySoftbank::Output;
 
 binmode STDOUT => ':utf8';
 binmode STDERR => ':utf8';
@@ -99,7 +97,15 @@ vcard 形式で出力されたアドレス帳を指定します。これを元�
     my $mc = MySoftbank::CallDetail->new(%opt);
     $mc->access_to_detail_top; # 明細書のトップ
     my ($data, $ym) = $mc->get_detail; # 明細を得る
-    $mc->output($data, $ym); # 出力する
+    my $file = $mc->output($data, $ym); # 出力する
+
+    infof('メール送信開始');
+    MySoftbank::Mail->new(
+        %opt,
+        ym => $ym,
+        file => $file,
+    )->send;
+
     infof('終了しました。');
 } #}}}
 
@@ -115,8 +121,9 @@ sub get_options { #{{{
     ($opt{help} or !$opt{username} or !$opt{password}
             or (defined $opt{ym} and $opt{ym} !~ /^\d{6}$/)
             or (defined $opt{vcard} and !-f $opt{vcard})
-            or $opt{output_type} !~ /^(?:json|yaml|csv|excel|html)$/i
-            or $opt{verbose} !~ /^(?:0|1|2)$/)
+            or defined $opt{output_type}
+                and $opt{output_type} !~ /^(?:json|yaml|csv|excel|html)$/i
+            or defined $opt{verbose} and $opt{verbose} !~ /^(?:0|1|2)$/)
         and pod2usage(-verbose => 2);
 
     $Log::Minimal::AUTODUMP = 1;
