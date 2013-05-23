@@ -130,6 +130,12 @@ HTML
 
     my ($data, $ym) = $mc->get_detail; # 明細を得る
     my $file = $mc->output($data, $ym); # 出力する
+    $stats->{last_executed} = $ym;
+    if (defined $opt{stats}) {
+        my $fh = file($opt{stats})->openw;
+        $fh->print(to_json($stats));
+        $fh->close;
+    }
 
     MySoftbank::Mail->new(%opt,
         file => $file,

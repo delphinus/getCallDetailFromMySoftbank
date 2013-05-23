@@ -13,3 +13,5 @@ mail_password: abc1234
 from: abc@gmail.com
 # メールの送信先
 to: abc@gmail.com
+# 最後に実行した日時を保存するファイル
+stats: /tmp/get-latest-detail.cfg
