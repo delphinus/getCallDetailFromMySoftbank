@@ -13,6 +13,7 @@ use MySoftbank::AddressBook;
 use MySoftbank::CallDetail::Filter::Trim;
 use MySoftbank::CallDetail::Filter::PageNumber;
 use MySoftbank::CallDetail::Filter::DeleteComma;
+use MySoftbank::Output;
 
 use Data::Util qw!:check!;
 use Date::Manip;
@@ -227,4 +228,6 @@ sub output { my $self = shift; #{{{
         year  => $year,
         month => $month,
     )->output;
+
+    return $file;
 } #}}}

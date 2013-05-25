@@ -1,0 +1,17 @@
+---
+# 明細を取得する電話番号
+username: 09012345678
+# My Softbank のパスワード
+password: abcdefgh1234
+# 作成形式
+output_type: html
+# メールサーバーのユーザー名
+mail_username: abc@gmail.com
+# メールサーバーのパスワード
+mail_password: abc1234
+# メールの送信元
+from: abc@gmail.com
+# メールの送信先
+to: abc@gmail.com
+# 最後に実行した日時を保存するファイル
+stats: /tmp/get-latest-detail.cfg
