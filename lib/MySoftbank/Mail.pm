@@ -3,7 +3,6 @@ use 5.12.0;
 use utf8;
 use Moose;
 use Moose::Util::TypeConstraints qw!enum!;
-use MooseX::Types::Email qw!EmailAddress!;
 
 with 'MySoftbank::Output::Role::File';
 
@@ -24,7 +23,10 @@ has ssl      => (is => 'ro', isa => 'Bool', default => 1);
 has server   => (is => 'ro', isa => 'Str', default => 'smtp.gmail.com');
 has port     => (is => 'ro', isa => 'Int', default => 465);
 has from     => (is => 'ro', isa => 'Str', required => 1);
-has to       => (is => 'ro', isa => 'Str', required => 1);
+has to       => (is => 'ro', isa => 'ArrayRef[Str]', auto_deref => 1,
+    required => 1);
+has cc       => (is => 'ro', isa => 'ArrayRef[Str]', auto_deref => 1,
+    default => sub { [''] });
 has username => (is => 'ro', isa => 'Str', required => 1);
 has ym       => (is => 'ro', isa => 'Str', default => '000000');
 has subject  => (is => 'ro', isa => 'Str',
@@ -80,11 +82,18 @@ sub send { my $self = shift; #{{{
             => "<:encoding($charset{charset})"),
     );
 
+    my $to = scalar $self->to ? join (', ', $self->to) : '';
+    my @cc;
+    if (scalar $self->cc) {
+        @cc = (Cc => scalar $self->cc ? join (', ', $self->cc) : '');
+    }
+
     my $email = Email::MIME->create(
         header_str => [
             From => $self->from,
-            To => $self->to,
+            To => join(', ', $self->to),
             Subject => $self->tx->render_string($self->subject, \%params),
+            @cc,
         ],
         parts => [
             $self->tx->render_string($self->data, \%params),
