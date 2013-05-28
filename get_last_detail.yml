@@ -19,3 +19,5 @@ cc:
   - abc@gmail.com
 # 最後に実行した日時を保存するファイル
 stats: /tmp/get-latest-detail.cfg
+# 連絡帳
+vcard: abc.vcf
