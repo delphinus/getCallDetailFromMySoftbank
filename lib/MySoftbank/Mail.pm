@@ -73,7 +73,7 @@ sub send { my $self = shift; #{{{
 
     my $attachment = Email::MIME->create(
         attributes => +{
-            filename => "test.$ext",
+            filename => "call_detail-$year$month.$ext",
             content_type => $content_type,
             disposition => 'attachment',
             %charset,
