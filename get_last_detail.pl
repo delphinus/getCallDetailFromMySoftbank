@@ -120,27 +120,46 @@ HTML
     infof('アクセス開始');
     debugf(\%opt);
     my $mc = MySoftbank::CallDetail->new(%opt);
-    $mc->access_to_detail_top; # 明細書のトップ
-    my $results = $mc->scrape_detail_page;
 
-    if ($results->{ym} eq $stats->{last_executed}) {
-        infof('既に実行済です');
-        exit;
+    eval {
+        $mc->access_to_detail_top; # 明細書のトップ
+        my $results = $mc->scrape_detail_page;
+
+        if ($results->{ym} eq $stats->{last_executed}) {
+            infof('既に実行済です');
+            exit;
+        }
+
+        my ($data, $ym) = $mc->get_detail; # 明細を得る
+        my $file = $mc->output($data, $ym); # 出力する
+        $stats->{last_executed} = $ym;
+        if (defined $opt{stats}) {
+            my $fh = file($opt{stats})->openw;
+            $fh->print(to_json($stats));
+            $fh->close;
+        }
+
+        MySoftbank::Mail->new(%opt,
+            file => $file,
+            ym => $ym,
+        )->send;
+    };
+
+    if (my $err = $@) {
+        my ($err_fh, $err_file) = tempfile('tempfileXXXXX', TMPDIR => 1);
+        binmode $err_fh => ':utf8';
+        $err_fh->print($mc->m->content);
+        $err_fh->close;
+        MySoftbank::Mail->new(%opt,
+            file => $err_file,
+            subject => "$0: エラーが発生しました。",
+            data => <<EOM
+通信中にエラーが発生しました。添付ファイルも確認してください。
+
+$err
+EOM
+        )->send;
     }
-
-    my ($data, $ym) = $mc->get_detail; # 明細を得る
-    my $file = $mc->output($data, $ym); # 出力する
-    $stats->{last_executed} = $ym;
-    if (defined $opt{stats}) {
-        my $fh = file($opt{stats})->openw;
-        $fh->print(to_json($stats));
-        $fh->close;
-    }
-
-    MySoftbank::Mail->new(%opt,
-        file => $file,
-        ym => $ym,
-    )->send;
 
     infof('メールを送信しました。');
 } #}}}

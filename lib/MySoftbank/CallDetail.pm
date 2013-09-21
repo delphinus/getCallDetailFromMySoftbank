@@ -50,6 +50,7 @@ sub access_to_detail_top { my $self = shift; #{{{
     $self->m->agent_alias($self->agent_alias);
     $self->m->get($self->top_url);
     debugf($self->m->uri);
+    $self->m->submit_form; # ログイン
     $self->m->submit_form( # ログイン
         with_fields => +{
             msn => $self->username,
