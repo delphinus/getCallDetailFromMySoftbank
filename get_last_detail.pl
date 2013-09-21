@@ -84,6 +84,10 @@ C<get_last_detail.yml> を読みます。
 
 テストメールを送信します。
 
+=item --ym
+
+年月を YYYYMM の形式で指定して取得します。デフォルトでは未指定です。
+
 =item --help,-h
 
 ヘルプを表示します。
@@ -168,7 +172,7 @@ EOM
 sub get_options { #{{{
     my %opt = @_;
 
-    my @option_definition = qw!config|c=s test|t help|h verbose|v=i!;
+    my @option_definition = qw!config|c=s test|t help|h verbose|v=i ym=s!;
     # オプションの受け取りに失敗するか、-h が指定されたらヘルプを表示
     GetOptions(\%opt, @option_definition) or pod2usage(-verbose => 2);
     $opt{help} and pod2usage(-verbose => 2);
