@@ -51,8 +51,13 @@ sub access_to_detail_top { my $self = shift; #{{{
     $self->m->get($self->top_url);
     debugf($self->m->uri);
     $self->m->submit_form( # ログイン
+        form_id => 'authActionForm',
+        button => 'doCasisLogin',
+    );
+    debugf($self->m->uri);
+    $self->m->submit_form( # ログイン
         with_fields => +{
-            msn => $self->username,
+            telnum => $self->username,
             password => $self->password,
         },
     );
