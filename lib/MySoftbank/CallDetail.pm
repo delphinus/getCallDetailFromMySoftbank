@@ -62,7 +62,9 @@ sub access_to_detail_top { my $self = shift; #{{{
         },
     );
     debugf($self->m->uri);
-    $self->m->follow_link(text => '利用料金を確認する');
+    $self->m->follow_link(text => '料金案内');
+    debugf($self->m->uri);
+    $self->m->follow_link(url_regex => qr,/msb/d/webLink/doSend/WCO010000,);
     debugf($self->m->uri);
     $self->m->submit;
     debugf($self->m->uri);
