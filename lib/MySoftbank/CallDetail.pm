@@ -26,8 +26,10 @@ subtype YM
     => as Int
     => where { /\d{6}/; };
 
-has m => (is => 'ro', isa => 'WWW::Mechanize',
-    default => sub { return WWW::Mechanize->new; } );
+has m => (is => 'ro', isa => 'WWW::Mechanize', default => sub {
+    # user-agent for iPad
+    return WWW::Mechanize->new(agent => 'Mozilla/5.0 (iPad; CPU iPhone OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53');
+} );
 
 has agent_alias => (is => 'ro', isa => 'Str', default => 'Windows Mozilla');
 has top_url => (is => 'ro', isa => Uri, coerce => 1,
