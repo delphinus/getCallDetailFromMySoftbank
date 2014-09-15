@@ -26,7 +26,7 @@ sub phone_number_to_name { my $self = shift; #{{{
         for my $p (@phones) {
             defined $p or next;
             (my $number = $p->value) =~ s/\D//g;
-            $map{$number} = decode(utf8 => $name);
+            $map{$number} = $name;
         }
     }
 
