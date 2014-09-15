@@ -54,12 +54,11 @@ sub default_option { #{{{
     (my $config = file($0)->basename) =~ s/\.pl$/.yml/;
 
     return (
-        agent_alias => 'Windows Mozilla', # Web アクセスに使用する UA
-        top_url => 'https://my.softbank.jp/msb/d/top', # トップページの URL
+        top_url     => 'https://my.softbank.jp/msb/d/top', # トップページの URL
         output_type => 'html', # 標準では結果を HTML で出力
-        dir => tempdir(),
-        config => dir($FindBin::Bin)->file($config)->stringify,
-        verbose => 1,
+        dir         => tempdir(),
+        config      => dir($FindBin::Bin)->file($config)->stringify,
+        verbose     => 1,
         %opt,
     );
 } #}}}
