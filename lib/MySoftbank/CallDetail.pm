@@ -26,10 +26,12 @@ subtype YM
     => as Int
     => where { /\d{6}/; };
 
-has m => (is => 'ro', isa => 'WWW::Mechanize',
-    default => sub { return WWW::Mechanize->new; } );
+has m => (is => 'ro', isa => 'WWW::Mechanize', default => sub {
+    # UA of iPad
+    return WWW::Mechanize->new(agent => 'Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53');
+} );
 
-has agent_alias => (is => 'ro', isa => 'Str', default => 'Windows Mozilla');
+has agent_alias => (is => 'ro', isa => 'Str');
 has top_url => (is => 'ro', isa => Uri, coerce => 1,
     default => 'https://my.softbank.jp/msb/d/top');
 has output_type => (is => 'ro', isa => enum([qw!json yaml csv excel html!]),
@@ -47,7 +49,7 @@ __PACKAGE__->meta->make_immutable; no Moose;
 
 # 明細書のトップまで行く
 sub access_to_detail_top { my $self = shift; #{{{
-    $self->m->agent_alias($self->agent_alias);
+    $self->m->agent_alias($self->agent_alias) if $self->agent_alias;
     $self->m->get($self->top_url);
     debugf($self->m->uri);
     $self->m->submit_form( # ログイン
